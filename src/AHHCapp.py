@@ -43,7 +43,7 @@ style_card = {'border': '1px solid #d3d3d3', 'border-radius': '10px'}
 ### PLOT 1 FUNCTION ###
 def plot_altair1(dff, drop1_chosen):
     barchart = alt.Chart(dff[-pd.isnull(dff[drop1_chosen])]).mark_bar().encode(
-    alt.X(drop1_chosen, title='Count of '+drop1_chosen, axis=alt.Axis(orient='top')),
+    alt.X(drop1_chosen, title='Count of '+ drop1_chosen, axis=alt.Axis(orient='top')),
     alt.Y('COUNTY', sort='-x', title=""),
     tooltip=[drop1_chosen,'COUNTY']).configure_axis(labelFontSize = 16, titleFontSize=20)
     return barchart.to_html()
@@ -66,8 +66,10 @@ def plot_altair3(dff, drop_a, drop_b):
                            ).configure_axis(labelFontSize = 16)
     return chart.to_html()
 
+### PLOT
+
 #------------------------------------------------------------------------------
-app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+app = dash.Dash(__name__, external_stylesheets=[dbc.themes.CYBORG])
 
 app.layout = dbc.Container([
        dbc.Row([
