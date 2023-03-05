@@ -15,7 +15,7 @@ import dash_bootstrap_components as dbc
 
 #------------------------------------------------------------------------------
 # DEFINING
-df = pd.read_csv("data/mindata.csv")  
+df = pd.read_csv("data/clean/mindata.csv")  
 
 colors = {
     'background': '#6fa8dc',
