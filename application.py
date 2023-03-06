@@ -102,7 +102,6 @@ def plot_altair4(dff, drop1_chosen):
 
 #------------------------------------------------------------------------------
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-application = app.server
 
 app.layout = html.Div(
     [
@@ -285,6 +284,8 @@ def update_df(options_chosen, population_chosen,
             plot_altair3(dff, drop3a_chosen, drop3b_chosen),
             plot_altair4(dff, drop1_chosen),
             options_chosen)
+
+application = app.server
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
