@@ -18,8 +18,6 @@ import dash_bootstrap_components as dbc
 #------------------------------------------------------------------------------
 # CREATE AND ENABLE ALTAIR THEME
 
-alt.themes.enable('fivethirtyeight')
-
 #------------------------------------------------------------------------------
 # DEFINING
 colors = {
@@ -53,7 +51,7 @@ df = df.rename(columns={df.columns[3]: "Total_Population", df.columns[4]: "Housi
                         df.columns[12]: "population_disabled", df.columns[13]: "Single_parent_child_under_age18",df.columns[14]: "Minority_group", 
                         df.columns[15]: "Above_age5_belowavg_english", df.columns[16]: "Housing_10plus_units",df.columns[17]: "Mobile_homes", 
                         df.columns[18]: "More_people_than_rooms", df.columns[19]: "House_with_no_vehicle",df.columns[20]: "People_in_quarters",
-                        df.columns[22]: "Socioeconomic", df.columns[23]: "Household Composition & Disability", df.columns[24]: "Minority Status & Language",
+                        df.columns[22]: "Socioeconomic Status", df.columns[23]: "Household Composition & Disability", df.columns[24]: "Minority Status & Language",
                         df.columns[25]: "Housing Type & Transportation"}) 
 
 print(df.columns)
@@ -69,7 +67,7 @@ def plot_altair1(dff, drop1_chosen):
     ).configure_axis(
         labelFontSize=16,
         titleFontSize=20
-    )
+    ).properties(title = "Rank counties by {}".format(drop1_chosen))
     return barchart.to_html()
 
 ### PLOT 2 FUNCTION ###
@@ -78,16 +76,18 @@ def plot_altair2(dff, drop_a, drop_b):
         x= alt.X(drop_a, axis=alt.Axis(format='.0f')),
         y=alt.Y(drop_b, axis=alt.Axis(format='.0f')),
         tooltip=['COUNTY', drop_a, drop_b]
-    ).configure_axis(labelFontSize = 16, titleFontSize=20)
+    ).configure_axis(labelFontSize = 16, titleFontSize=20
+                     ).properties(title = " Scatter of {} v/s {}".format(drop_a, drop_b))
     return chart.to_html()
 
 ### PLOT 3 FUNCTION ###
 def plot_altair3(dff, drop_a, drop_b):  
     chart = alt.Chart(dff).mark_bar().encode(
-        x = alt.X('COUNTY', sort='y', axis=alt.Axis(title = None)),
-        y = alt.Y(drop_a, axis=alt.Axis(format='.0f'))
+        x = alt.X(drop_a, axis=alt.Axis(format='.0f')),
+        y = alt.Y('COUNTY', sort='x', axis=alt.Axis(title = None))
         ).transform_filter(alt.FieldOneOfPredicate(field='COUNTY', oneOf=drop_b)
-                           ).configure_axis(labelFontSize = 16, titleFontSize=20)
+                           ).configure_axis(labelFontSize = 16, titleFontSize=20
+                                            ).properties(title = "Compare {} among counties".format(drop_a))
     return chart.to_html()
 
 ### PLOT 4 FUNCTION ###
@@ -95,13 +95,15 @@ def plot_altair4(dff, drop1_chosen):
     barchart = alt.Chart(dff.sort_values(by=drop1_chosen, ascending=True).head(15)).mark_line().encode(
     alt.X(drop1_chosen, title=drop1_chosen),
     alt.Y('COUNTY', sort='x', title='Bottom 10 Counties'),
-    tooltip=[drop1_chosen,'COUNTY']).configure_axis(labelFontSize = 16, titleFontSize=20)
+    tooltip=[drop1_chosen,'COUNTY']).configure_axis(labelFontSize = 16, titleFontSize=20
+                                                    ).properties(title = "Rank counties by {}".format(drop1_chosen))
     return barchart.to_html()
 
 ### PLOT
 
 #------------------------------------------------------------------------------
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+application = app.server
 
 app.layout = html.Div(
     [
@@ -137,10 +139,12 @@ app.layout = html.Div(
                         html.H3("Select County Population: ", style = style_H3_c),
                         dcc.RangeSlider(id="population", min=1300, max=363744, step = 1000, 
                                         marks={1300: '1.3k',
-                                            50000: '50k',
                                             100000: '100k',
-                                            363744: '364k'},
-                                        value=[1300,363744]),
+                                            200000: '200k',
+                                            300000: '300k',
+                                            400000: '400k'
+                                            },
+                                        value=[1300,400000]),
 
                         ### DROPDOWN 1 ###
                         html.Br(),
@@ -149,8 +153,8 @@ app.layout = html.Div(
                         dcc.Dropdown(
                             id='drop1',
                             placeholder="Variables",
-                            value='Socioeconomic',  
-                            options=[{'label': 'Socioeconomic Status', 'value': 'Socioeconomic'},
+                            value='Socioeconomic Status',  
+                            options=[{'label': 'Socioeconomic Status', 'value': 'Socioeconomic Status'},
                                      {'label': 'Household Composition & Disability', 'value': 'Household Composition & Disability'},
                                      {'label': 'Minority Status & Language', 'value': 'Minority Status & Language'},
                                      {'label': 'Housing Type & Transportation', 'value': 'Housing Type & Transportation'}], # only including actual variables
@@ -289,4 +293,4 @@ application = app.server
 
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
-    application.run(host='0.0.0.0', port='8080')
+    application.run(host='0.0.0.0', port='8050', debug=True)
