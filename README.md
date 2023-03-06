@@ -18,7 +18,7 @@ As described by the ATSDR:
 
 It contains ‘Social Vulnerability Indices’ per subdivision of counties area of Puerto Rico for the years 2016 and 2018.  The 15 variables are categorized into four themes: Socioeconomic Status, Household Composition & Disability, Minority Status & Language, and Housing Type & Transportation. 
 
-The dataset contains over 120 columns because it contains many estimates per variable [count (E_)+ MOE (M_), percentage (EP_)+ MOE (MP_), percentile (EPL_),  percentile ranking, flags for percentage >90th percentile (F_)], values aggregated per theme (sum (SPL_) + percentile ranking (RPL_), flags (F_). 
+The dataset contains over 120 columns because it contains many estimates per variable [count (E_)+ MOE (M_), percentage (EP_)+ MOE (MP_), percentile (EPL_),  percentile ranking, flags for percentage >90th percentile (F_)], values aggregated per theme (sum (SPL_) + percentile ranking (RPL_), flags (F_)). 
 
 ### Variable descriptions
 - _TOTPOP: Population
@@ -32,23 +32,24 @@ The dataset contains over 120 columns because it contains many estimates per var
 - _AGE17: Persons aged 17 and younger
 - _DISABL: Civilian noninstitutionalized population with a disability
 - _SNGPNT: Single parent household with children under 18
-- _MINRTY: Minority (all persons except white, non-Hispanic
+- _MINRTY: Minority (all persons except white, non-Hispanic)
 - _LIMENG: Persons (age 5+) who speak English "less than well"
 - _MUNIT: Housing in structures with 10 or more units
 - _MOBILE: Mobile homes
 - _CROWD: At household level (occupied housing units), more people than rooms
 - _NOVEH: Households with no vehicle available
 - _GROUPQ: Persons in institutionalized and noninstitutionalized group quarters
+- RPL_THEME1: Socioeconomic Status
+- RPL_THEME2: Household Composition and Disability
+- RPL_THEME3: Minority Status and Language
+- RPL_THEME4: Housing Type and Transportation
 
 
 ## Dashboard Features
 First off, a user may choose which year is applied to the graphs, between 2016 and 2018. They could track thus the difference SVI's in counties before and after Hurricane Maria (2017). As well, a user may filter by county population.
 
-This Dashboard contains three graphs (so far). The first is a sorted bar plot of counties, showing the count of a variable the user's chose via a dropdown. The user is able to scroll down and see the values for everycounty. A tooltip is applied to the user can see exactly the value of the variable. This allows the user to see which county has, for example, the greatest population. 
-
-The second graph is a scatterplot where a user may choose two variables to compare. The user could analyze the trend, and see if some are correlated with each other. 
-
-The final plot allows the user to select specific counties to compare in a barchart with a specific variable. This helps the user to visualize a narrowed down list of counties, to compare those of interest with more ease.
+This Dashboard diplays four charts. The charts in the first column rank the top 10 and bottom counties, ranked on a specific chosen SVI index. It is a line chart 
+The Scatterplot on te top right can be used to quickly compare changes in a given SVI variable with respect to another SVI variable. The final plot (bottom right) lets the viewer compare specific variables among the different counties in Puerto Rico in the form of a bar chart. This helps the user to visualize a narrowed down list of counties, to compare those of interest with more ease. These visualizations, combined with the provided filters on the left of the dashboard enables the viewer to get a quick understanding of trends present in the data when combined with the filter for specifying the year (2016 or 2018). Using this dashboard is an easy way to perform a preliminary exploratory data analysis on the effect of Hurricane Maria which hit Puerto Rico in 2017.
 
 
 ### References
