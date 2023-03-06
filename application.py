@@ -62,7 +62,7 @@ df2 = df.drop(columns=['Unnamed: 0.1', 'Unnamed: 0', 'year'])
 #------------------------------------------------------------------------------
 ### PLOT 1 FUNCTION ###
 def plot_altair1(dff, drop1_chosen):
-    barchart = alt.Chart(dff[-pd.isnull(dff[drop1_chosen])].sort_values(by=drop1_chosen, ascending=False).head(15)).mark_bar().encode(
+    barchart = alt.Chart(dff[-pd.isnull(dff[drop1_chosen])].sort_values(by=drop1_chosen, ascending=False).head(15)).mark_line().encode(
         alt.X(drop1_chosen,title=drop1_chosen),
         alt.Y('COUNTY', sort='-x', title='Top 10 Counties'),
         tooltip=[drop1_chosen,'COUNTY']
@@ -92,7 +92,7 @@ def plot_altair3(dff, drop_a, drop_b):
 
 ### PLOT 4 FUNCTION ###
 def plot_altair4(dff, drop1_chosen):
-    barchart = alt.Chart(dff.sort_values(by=drop1_chosen, ascending=True).head(15)).mark_bar().encode(
+    barchart = alt.Chart(dff.sort_values(by=drop1_chosen, ascending=True).head(15)).mark_line().encode(
     alt.X(drop1_chosen, title=drop1_chosen),
     alt.Y('COUNTY', sort='x', title='Bottom 10 Counties'),
     tooltip=[drop1_chosen,'COUNTY']).configure_axis(labelFontSize = 16, titleFontSize=20)
@@ -102,6 +102,7 @@ def plot_altair4(dff, drop1_chosen):
 
 #------------------------------------------------------------------------------
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
+application = app.server()
 
 app.layout = html.Div(
     [
@@ -150,7 +151,7 @@ app.layout = html.Div(
                             id='drop1',
                             placeholder="Variables",
                             value='Socioeconomic',  
-                            options=[{'label': 'Socioeconomic', 'value': 'Socioeconomic'},
+                            options=[{'label': 'Socioeconomic Status', 'value': 'Socioeconomic'},
                                      {'label': 'Household Composition & Disability', 'value': 'Household Composition & Disability'},
                                      {'label': 'Minority Status & Language', 'value': 'Minority Status & Language'},
                                      {'label': 'Housing Type & Transportation', 'value': 'Housing Type & Transportation'}], # only including actual variables
@@ -189,7 +190,7 @@ app.layout = html.Div(
                         html.H3('Among Counties', style = style_H3_c),
                         dcc.Dropdown(
                             id='drop3_b',
-                            value=df.head(10)['COUNTY'], 
+                            value=df.head(15)['COUNTY'], 
                             options=[{'label': counties, 'value': counties} for counties in df['COUNTY']], multi = True),
                         html.H3('in a Barplot', style = style_H3_c)
                     ],
@@ -237,10 +238,10 @@ app.layout = html.Div(
                                         style=style_plot3)
                                 ],
                                 style = {'background-color': '#FFFFFF'},
-                                width = 4
                             )
                         )
-                    ]
+                    ],
+                    width = 4
                 )
             ]
         )
@@ -285,7 +286,6 @@ def update_df(options_chosen, population_chosen,
             plot_altair4(dff, drop1_chosen),
             options_chosen)
 
-
 #------------------------------------------------------------------------------
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    application.run(host='0.0.0.0', port='8080')
