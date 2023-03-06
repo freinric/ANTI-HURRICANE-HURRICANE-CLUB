@@ -102,7 +102,7 @@ def plot_altair4(dff, drop1_chosen):
 
 #------------------------------------------------------------------------------
 app = dash.Dash(__name__, external_stylesheets=[dbc.themes.BOOTSTRAP])
-application = app.server()
+application = app.server
 
 app.layout = html.Div(
     [
