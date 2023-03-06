@@ -47,6 +47,16 @@ style_plot3 = {'border-width': '0', 'width': '100%', 'height': '450px'}
 # READ DATA
 
 df = pd.read_csv("data/clean/mindata.csv")
+df = df.rename(columns={df.columns[3]: "Total_Population", df.columns[4]: "Housing_units", df.columns[5]: "Households",
+                        df.columns[6]: "Persons_below_poverty", df.columns[7]: "Unemployed_above_age16", df.columns[8]: "Per_capita_income",
+                        df.columns[9]: "No_diploma_above_age25", df.columns[10]: "Above_age65", df.columns[11]: "Under_age17",
+                        df.columns[12]: "population_disabled", df.columns[13]: "Single_parent_child_under_age18",df.columns[14]: "Minority_group", 
+                        df.columns[15]: "Above_age5_belowavg_english", df.columns[16]: "Housing_10plus_units",df.columns[17]: "Mobile_homes", 
+                        df.columns[18]: "More_people_than_rooms", df.columns[19]: "House_with_no_vehicle",df.columns[20]: "People_in_quarters",
+                        df.columns[22]: "Socioeconomic", df.columns[23]: "Household Composition & Disability", df.columns[24]: "Minority Status & Language",
+                        df.columns[25]: "Housing Type & Transportation"}) 
+
+print(df.columns)
 df2 = df.drop(columns=['Unnamed: 0.1', 'Unnamed: 0', 'year'])  
 
 #------------------------------------------------------------------------------
@@ -139,11 +149,11 @@ app.layout = html.Div(
                         dcc.Dropdown(
                             id='drop1',
                             placeholder="Variables",
-                            value='RPL_THEME1',  
-                            options=[{'label': 'Socioeconomic', 'value': 'RPL_THEME1'},
-                                     {'label': 'Household Composition & Disability', 'value': 'RPL_THEME2'},
-                                     {'label': 'Minority Status & Language', 'value': 'RPL_THEME3'},
-                                     {'label': 'Housing Type & Transportation', 'value': 'RPL_THEME4'}], # only including actual variables
+                            value='Socioeconomic',  
+                            options=[{'label': 'Socioeconomic', 'value': 'Socioeconomic'},
+                                     {'label': 'Household Composition & Disability', 'value': 'Household Composition & Disability'},
+                                     {'label': 'Minority Status & Language', 'value': 'Minority Status & Language'},
+                                     {'label': 'Housing Type & Transportation', 'value': 'Housing Type & Transportation'}], # only including actual variables
                             style = style_dropdown),
                         
                         ### DROPDOWN 2 ###
@@ -152,15 +162,15 @@ app.layout = html.Div(
                         html.H3('Compare ', style = style_H3_c),
                         dcc.Dropdown(
                             id='drop2_a',
-                            value='E_UNEMP', 
+                            value='Unemployed_above_age16', 
                             options=[{'label': col, 'value': col} for col in df2.select_dtypes(include='number').columns], 
                             style = style_dropdown),
 
                         ### DROPDOWN 3 ###    
-                        html.H3('and ', style  = style_H3_c),
+                        html.H3('VS', style  = style_H3_c),
                         dcc.Dropdown(
                             id='drop2_b',
-                            value='E_TOTPOP', 
+                            value='Total_Population', 
                             options=[{'label': col, 'value': col} for col in df2.select_dtypes(include='number').columns], 
                             style =style_dropdown),
                         html.H3('in a Scatterplot', style = style_H3_c),
@@ -171,12 +181,12 @@ app.layout = html.Div(
                         html.H3('Compare', style = style_H3_c),
                         dcc.Dropdown(
                             id='drop3_a',
-                            value='E_NOVEH', 
+                            value='House_with_no_vehicle', 
                             options=[{'label': col, 'value': col} for col in df2.select_dtypes(include='number').columns], 
                             style=style_dropdown),
 
                         ### DROPDOWN 5 ###
-                        html.H3('among Counties', style = style_H3_c),
+                        html.H3('Among Counties', style = style_H3_c),
                         dcc.Dropdown(
                             id='drop3_b',
                             value=df.head(10)['COUNTY'], 
@@ -263,7 +273,7 @@ def update_df(options_chosen, population_chosen,
     # filter by population
     popmin = population_chosen[0]
     popmax = population_chosen[1]
-    dff = df[df['E_TOTPOP'].between(popmin, popmax)]
+    dff = df[df['Total_Population'].between(popmin, popmax)]
 
     # filter by year
     dff = dff[dff['year'] == options_chosen]
